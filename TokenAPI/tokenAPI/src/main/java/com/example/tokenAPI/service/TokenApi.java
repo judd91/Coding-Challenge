@@ -2,7 +2,6 @@ package com.example.tokenAPI.service;
 
 import com.example.tokenAPI.model.Payments;
 import org.springframework.stereotype.Component;
-import org.springframework.util.ResourceUtils;
 import org.web3j.contracts.eip20.generated.ERC20;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
@@ -10,11 +9,8 @@ import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.http.HttpService;
 import org.web3j.tx.gas.DefaultGasProvider;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.math.BigInteger;
 import java.util.List;
-import java.util.Scanner;
 
 @Component
 public class TokenApi {
@@ -23,6 +19,13 @@ public class TokenApi {
     /*Blockchain connection*/
     Web3j web3 = Web3j.build(new HttpService("http://localhost:8545"));
 
+    /**
+     * Load the token contract developed in the blockchain.
+     * Make the ordered transaction.
+     *
+     * @param payment
+     * @return Event response from the smart contract
+     */
     public List<ERC20.TransferEventResponse> makeTransaction(Payments payment) {
         System.out.println("amount:" + payment.getAmount() + " accountfrom:" + payment.getAccountfrom() + " accountto:" + payment.getAccountto());
         /*try {
@@ -36,14 +39,14 @@ public class TokenApi {
         }*/
 
         Credentials credentials = Credentials.create(payment.getPk());
-        String contractAddress = "0x5CB0E78448e0f374B688D6B9D79e10e51eEc897B";
+        String contractAddress = "0x3A5DFdbE596E7b08e59B58BF7aB36f35E11d76F4";
         ERC20 ERC20Token = ERC20.load(contractAddress, web3, credentials, new DefaultGasProvider());
 
         String accountto = payment.getAccountto();
         String accountfrom = payment.getAccountfrom();
         String amount = payment.getAmount().toString();
         TransactionReceipt receipt = null;
-        List<ERC20.TransferEventResponse> events = null ;
+        List<ERC20.TransferEventResponse> events = null;
         try {
             /*Check current balance*/
             BigInteger balance1_a = ERC20Token.balanceOf(accountfrom).send();
@@ -60,7 +63,8 @@ public class TokenApi {
             System.out.println("balance to after transaction: " + balance_b);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();
+            System.out.println(e.getMessage());
         }
         return events;
     }
