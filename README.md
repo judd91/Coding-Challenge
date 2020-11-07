@@ -11,7 +11,7 @@ It is necessary to have the local blockchain and database server running.
 
 
 ## Getting Started
-There are described the instructions to setting up the project locally. 
+Instructions to setting up the project locally. 
 
 ### Requirements
 The Token Application is implemented in Java 8. MyToken.sol smart contract is implemented by using the [Zeppeling]() library which provides the implementation of the ERC20 standard in Solidity 0.6.2 .
@@ -23,6 +23,7 @@ A list of frameworks used in the API development.
 * [Spring-Boot](https://spring.io/projects/spring-boot)
 * [Maven](https://maven.apache.org/)
 * [MySQL](https://www.mysql.com/)
+* [Web3j](https://docs.web3j.io/)
 
 Necesary tools to deploy the local blockchain.
 * [Truffle](https://www.trufflesuite.com/truffle) (ganache-cli is included)

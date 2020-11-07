@@ -2,6 +2,7 @@ package com.example.tokenAPI.service;
 
 import com.example.tokenAPI.model.Payments;
 import org.springframework.stereotype.Component;
+import org.springframework.util.ResourceUtils;
 import org.web3j.contracts.eip20.generated.ERC20;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
@@ -9,12 +10,15 @@ import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.http.HttpService;
 import org.web3j.tx.gas.DefaultGasProvider;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.math.BigInteger;
 import java.util.List;
+import java.util.Scanner;
 
 @Component
 public class TokenApi {
-    public static String pk;
+    public static String cAdd;
 
     /*Blockchain connection*/
     Web3j web3 = Web3j.build(new HttpService("http://localhost:8545"));
@@ -28,18 +32,18 @@ public class TokenApi {
      */
     public List<ERC20.TransferEventResponse> makeTransaction(Payments payment) {
         System.out.println("amount:" + payment.getAmount() + " accountfrom:" + payment.getAccountfrom() + " accountto:" + payment.getAccountto());
-        /*try {
-            File file = ResourceUtils.getFile("classpath:pk.txt");
+        try {
+            File file = ResourceUtils.getFile("classpath:contractAddress.txt");
             Scanner myReader = new Scanner(file);
-            pk = myReader.nextLine();
+            cAdd = myReader.nextLine();
             myReader.close();
         } catch (FileNotFoundException e) {
-            System.out.println("An error occurred when private key is read.");
+            System.out.println("An error occurred when contract address is read.");
             e.printStackTrace();
-        }*/
-
+        }
+        System.out.println(cAdd);
         Credentials credentials = Credentials.create(payment.getPk());
-        String contractAddress = "0x3A5DFdbE596E7b08e59B58BF7aB36f35E11d76F4";
+        String contractAddress = cAdd;
         ERC20 ERC20Token = ERC20.load(contractAddress, web3, credentials, new DefaultGasProvider());
 
         String accountto = payment.getAccountto();
@@ -66,6 +70,12 @@ public class TokenApi {
             //e.printStackTrace();
             System.out.println(e.getMessage());
         }
+        web3.shutdown();
         return events;
     }
+
+    /*public MyERC20Token deploying(credentials){
+        MyERC20Token mytoken = MyERC20Token.deploy(web3, credentials);
+        return mytoken;
+    }*/
 }

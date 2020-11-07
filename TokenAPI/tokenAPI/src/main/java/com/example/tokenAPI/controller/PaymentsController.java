@@ -6,12 +6,17 @@ import com.example.tokenAPI.model.Events;
 import com.example.tokenAPI.service.ServiceApp;
 import com.example.tokenAPI.service.TokenApi;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.web.bind.annotation.*;
 import org.web3j.contracts.eip20.generated.ERC20;
 
+import java.io.File;
+import java.io.IOException;
 import java.sql.*;
 import java.util.List;
 import java.util.Optional;
+
+
 
 @RestController
 @RequestMapping(path="/payment")
@@ -82,5 +87,11 @@ public class PaymentsController {
     public @ResponseBody Iterable<Events> getByPayId(@RequestParam String paymentId) {
         return paymentService.getBypaymentId(paymentId);
     }
+
+    /*@GetMapping("/deploy")
+    public void deployContract() throws IOException {
+        MyERC20Token mytoken;
+         System.out.println(resource);
+    }*/
 
 }
